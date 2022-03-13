@@ -18,7 +18,7 @@ If you find any bugs, please report them using the [GitHub issue tracker](https:
 This software is distributed under the terms of the Free Software Foundation [GNU Public License (GPL), version 3.0](http://www.gnu.org/licenses/gpl-3.0-standalone.html) (see [LICENSE](LICENSE)).
 
 ## Examples
-An example project that uses FluentHelper.EntityFramework can be found under the [Examples](https://github.com/MrSeekino/FluentHelper.EntityFrameworkCore/tree/master/Examples) folder in "FluentHelper.EntityFrameworkCore" repository.
+An example project that uses FluentHelper.EntityFrameworkCore.Moq can be found under the [Examples](https://github.com/MrSeekino/FluentHelper.EntityFrameworkCore/tree/master/Examples) folder in "FluentHelper.EntityFrameworkCore" repository.
 
 ## Related Projects
   - [FluentHelper.EntityFrameworkCore](https://github.com/MrSeekino/FluentHelper.EntityFrameworkCore)
