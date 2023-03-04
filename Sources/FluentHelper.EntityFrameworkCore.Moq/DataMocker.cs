@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,10 +8,14 @@ namespace FluentHelper.EntityFrameworkCore.Moq
 {
     class DataMocker<T> : IDataMocker<T> where T : class
     {
+        List<T> RollbackList { get; set; }
         List<T> FinalList { get; set; }
 
         List<T> AddList { get; set; }
         List<T> RemoveList { get; set; }
+
+        bool HasActiveTransaction { get; set; }
+        Mock<IDbContextTransaction> DbContectTransactionMock { get; set; }
 
         public DataMocker(IEnumerable<T> initialData)
         {
@@ -17,6 +23,12 @@ namespace FluentHelper.EntityFrameworkCore.Moq
 
             AddList = new List<T>();
             RemoveList = new List<T>();
+
+            HasActiveTransaction = false;
+
+            DbContectTransactionMock = new Mock<IDbContextTransaction>();
+            DbContectTransactionMock.Setup(x => x.Commit()).Callback(() => CommitTransaction());
+            DbContectTransactionMock.Setup(x => x.Rollback()).Callback(() => RollbackTransaction());
         }
 
         public int AddListCount()
@@ -56,6 +68,11 @@ namespace FluentHelper.EntityFrameworkCore.Moq
 
         public int SaveChanges()
         {
+            RollbackList.Clear();
+            if (HasActiveTransaction)
+                foreach (var item in FinalList)
+                    RollbackList.Add(item);
+
             int result = AddList.Count + RemoveList.Count;
 
             foreach (var addItem in AddList)
@@ -78,6 +95,40 @@ namespace FluentHelper.EntityFrameworkCore.Moq
             RemoveList.Clear();
 
             return result;
+        }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            if (HasActiveTransaction)
+                throw new Exception("There is already a transaction opened");
+
+            HasActiveTransaction = true;
+            return DbContectTransactionMock.Object;
+        }
+
+        public void CommitTransaction()
+        {
+            if (!HasActiveTransaction)
+                throw new Exception("No Open Transaction found");
+
+            HasActiveTransaction = false;
+
+            FinalList.Clear();
+            RollbackList.Clear();
+        }
+
+        public void RollbackTransaction()
+        {
+            if (!HasActiveTransaction)
+                throw new Exception("No Open Transaction found");
+
+            HasActiveTransaction = false;
+
+            FinalList.Clear();
+            foreach (var item in RollbackList)
+                FinalList.Add(item);
+
+            RollbackList.Clear();
         }
     }
 }

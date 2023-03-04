@@ -12,7 +12,7 @@
     <PackageTags>EntityFrameworkCore,FluentHelper,Moq</PackageTags>
     <Description>A simplified way to test FluentHelper.EntityFrameworkCore projects</Description>
     <RepositoryUrl>https://github.com/MrSeekino/FluentHelper.EntityFrameworkCore.Moq</RepositoryUrl>
-    <Version>1.5.0</Version>
+    <Version>1.6.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

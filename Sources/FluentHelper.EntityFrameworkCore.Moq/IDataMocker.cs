@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FluentHelper.EntityFrameworkCore.Moq
@@ -6,6 +7,10 @@ namespace FluentHelper.EntityFrameworkCore.Moq
     interface IDataMocker
     {
         int SaveChanges();
+
+        IDbContextTransaction BeginTransaction();
+        void CommitTransaction();
+        void RollbackTransaction();
     }
 
     interface IDataMocker<T> : IDataMocker
