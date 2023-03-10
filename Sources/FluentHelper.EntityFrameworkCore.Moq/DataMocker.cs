@@ -21,6 +21,7 @@ namespace FluentHelper.EntityFrameworkCore.Moq
         {
             FinalList = initialData == null ? new List<T>() : initialData.ToList();
 
+            RollbackList = new List<T>();
             AddList = new List<T>();
             RemoveList = new List<T>();
 
